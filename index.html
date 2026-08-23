@@ -94,8 +94,10 @@ main{padding:22px 0 70px}
 .k{
   font-weight:600;color:var(--tx);
 }
-.blur .k{filter:blur(6px);background:#2a2f3d;border-radius:4px;color:transparent;user-select:none}
-.blur .k:hover{filter:none;background:none;color:var(--tx)}
+.k{transition:filter .18s ease, background .18s ease, color .18s ease}
+/* เบลอเฉพาะการ์ดที่ยังพับอยู่ — พอกางออกจะเห็นชื่อฆาตกรเต็มๆ ทันที */
+.blur .ep:not([open]) .k{filter:blur(6px);background:#2a2f3d;border-radius:4px;color:transparent;user-select:none}
+.blur .ep:not([open]) .k:hover{filter:none;background:none;color:var(--tx)}
 .chev{flex:none;color:var(--tx3);transition:.2s;margin-top:5px}
 .ep[open] .chev{transform:rotate(90deg)}
 .body{padding:0 16px 16px;border-top:1px solid var(--line);margin-top:2px;padding-top:13px}
@@ -152,7 +154,7 @@ mark{background:rgba(217,164,65,.3);color:inherit;border-radius:3px;padding:0 2p
 
 <footer class="wrap">
   <p>ข้อมูลเรียบเรียงจากบทสรุปตอนของ Wikipedia และ The Mentalist Wiki (Fandom) · จัดทำเพื่อการอ้างอิงและทบทวนเนื้อเรื่องเท่านั้น</p>
-  <p class="spoiler-note">เคล็ดลับ: ชื่อฆาตกรจะเบลอไว้เป็นค่าเริ่มต้น — กดสวิตช์ “เปิดสปอยล์” ด้านบน หรือชี้เมาส์ที่ชื่อเพื่อดูทีละอัน</p>
+  <p class="spoiler-note">เคล็ดลับ: ชื่อฆาตกรจะเบลอไว้เฉพาะตอนที่ยังพับอยู่ — กดกางตอนไหนก็เห็นเต็มๆ ทันที หรือกดสวิตช์ “เปิดสปอยล์” ด้านบนเพื่อเห็นทั้งหมด</p>
 </footer>
 
 <script src="data.js"></script>
