@@ -108,6 +108,11 @@ main{padding:22px 0 70px}
 .tag{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--tx2);background:var(--bg)}
 .tag.rj{border-color:var(--red-dim);color:#ff8b96;background:rgba(224,56,74,.08)}
 .tag.arc{border-color:#3b4a2f;color:#a9d17a;background:rgba(140,200,90,.07)}
+.recap{margin-top:14px;padding-top:13px;border-top:1px dashed var(--line)}
+.recap h4{margin:0 0 8px;font-size:12.5px;font-weight:600;color:var(--red);letter-spacing:.06em;text-transform:uppercase}
+.recap h5{margin:16px 0 6px;font-size:13.5px;font-weight:600;color:var(--gold)}
+.recap p{margin:0 0 10px;font-size:14.5px;line-height:1.8;color:#cfd5e3}
+.recap p:last-child{margin-bottom:0}
 .empty{text-align:center;color:var(--tx3);padding:60px 0}
 footer{border-top:1px solid var(--line);padding:22px 0 40px;color:var(--tx3);font-size:13px}
 mark{background:rgba(217,164,65,.3);color:inherit;border-radius:3px;padding:0 2px}
@@ -180,6 +185,11 @@ qEl.oninput = () => { curQ = qEl.value.trim(); render(); };
 $('#spoil').onchange = e => document.body.classList.toggle('blur', !e.target.checked);
 $('#stTotal').textContent = EPISODES.length;
 
+function paras(t){
+  return String(t||'').split(/\n{2,}/).map(p=>p.trim()).filter(Boolean)
+    .map(p => p.startsWith('##') ? `<h5>${hl(p.replace(/^##\s*/,''))}</h5>` : `<p>${hl(p)}</p>`).join('');
+}
+
 function card(e){
   const tags = (e.tags||[]).map(t=>`<span class="tag ${t==='Red John'?'rj':'arc'}">${esc(t)}</span>`).join(' ');
   return `<details class="ep">
@@ -195,8 +205,11 @@ function card(e){
       ${e.victim?`<div class="row"><span class="lab">เหยื่อ</span><span class="val dim">${hl(e.victim)}</span></div>`:''}
       <div class="row"><span class="lab">ฆาตกร</span><span class="val"><span class="k">${hl(e.killer)}</span></span></div>
       <div class="row"><span class="lab">แรงจูงใจ</span><span class="val">${hl(e.motive)}</span></div>
-      <div class="row"><span class="lab">เรื่องย่อ</span><span class="val dim">${hl(e.plot)}</span></div>
       ${e.arc?`<div class="row"><span class="lab">เส้นเรื่องหลัก</span><span class="val dim">${hl(e.arc)}</span></div>`:''}
+      <div class="recap">
+        <h4>เล่าทั้งตอน</h4>
+        ${paras(e.recap || e.plot)}
+      </div>
     </div>
   </details>`;
 }
@@ -205,7 +218,7 @@ function render(){
   const q = curQ.toLowerCase();
   const eps = EPISODES.filter(e =>
     (!curSeason || e.s===curSeason) &&
-    (!q || [e.title,e.titleTh,e.killer,e.motive,e.plot,e.victim,e.arc].join(' ').toLowerCase().includes(q))
+    (!q || [e.title,e.titleTh,e.killer,e.motive,e.recap||e.plot,e.victim,e.arc].join(' ').toLowerCase().includes(q))
   );
   if(!eps.length){ listEl.innerHTML = '<p class="empty">ไม่พบตอนที่ตรงกับคำค้น</p>'; return; }
   let html = '', last = null;
